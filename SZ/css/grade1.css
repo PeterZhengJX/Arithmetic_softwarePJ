@@ -1,0 +1,30 @@
+*{
+    outline: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+body {
+    height: 100vh;
+    margin: 0 auto;
+    background-color: #000;
+    text-align: center;
+    outline: 0;
+    padding: 0;
+  /*margin: 0;*/
+    border: 0;
+}
+.secondbg {
+    color:#FFFFFF;
+    background-color: #FFFFFF;
+    width:85%;
+    height: 100%;
+    margin:0 auto;
+    text-align:center;
+    }
+
+.leixing {
+    font-family: "YouYuan";
+    margin: 0px;
+    padding: 5px;
+}
