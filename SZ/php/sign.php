@@ -1,0 +1,42 @@
+<?php
+header('Content-type:text/json;charset=utf-8');
+//网页输入读取
+$id=$_POST['id'];
+$name=$_POST['name'];
+$password=$_POST['password'];
+//连接数据库
+$link=mysqli_connect(
+    'localhost',
+    'root',
+    '2925473239zjx',
+    'students'
+);
+//设置年级1~3
+$grade_array=array(null,"first_grade","second_grade","third_grade");
+//解析传入的学号
+$str_id="".$id;
+$grade=intval(substr($str_id,0,1));
+$class=intval(substr($str_id,1,2));
+$sign=0;
+$exist=0;
+if($link){
+    $result=mysqli_query($link,"select count(id) from ".$grade_array[$grade]." where id='$str_id'");
+    if($result){
+        $data_num=mysqli_fetch_array($result);
+        if($data_num[0]==0){//若不存在则插入，设置sign=1，表示登录成功
+            $insert=mysqli_query($link,"insert into ".$grade_array[$grade]." values('$password','$name',null,null,'0000000000','$id') ");
+            if($insert){
+                $sign=1;
+        }
+        }else{
+            $exist=1;
+        }
+    }
+}
+//构造返回json字符串
+$data='{sign:"'.$sign.'",exist:"'.$exist.'"}';
+//返回json字符串
+echo json_encode($data);
+//关闭数据库
+mysqli_close($link);
+?>
