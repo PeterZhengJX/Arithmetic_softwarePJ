@@ -1,21 +1,20 @@
 <?php
 header('Content-type:text/json;charset=utf-8');
 //网页输入读取
-//$id="11116";
+//$id="11112";
 $id=$_POST['id'];
 //连接数据库
 $link=mysqli_connect(
     'localhost',
     'root',
     '2925473239zjx',
-    'students'
+    'teachers'
 );
 //设置年级1~3
 $grade_array=array(null,"first_grade","second_grade","third_grade");
 //解析传入的学号
 $str_id="".$id;
 $grade=intval(substr($str_id,0,1));
-$class=intval(substr($str_id,1,2));
 $find=0;
 $que_num=0;
 $percent="";
@@ -26,12 +25,7 @@ if($link){
     if($result){
         $find=1;
         $que_num=$result["que_num"];
-        if($que_num==null)//如果只为空则显示0
-            $que_num=0;
-        if($que_num!=0)
-            $percent="".round((float)$result["right_num"]/$que_num*100,2)."%";
-        else
-            $percent=0;
+        $percent="".round((float)$result["right_num"]/$que_num*100,2)."%";
         $timer="".intval(substr($result["timer"],4))."时".intval(substr($result["timer"],2,2))."分".intval(substr($result["timer"],0,2))."秒";
     }
     $data='{find:"'.$find.'",name:"'.$result["name"].'",grade:"'.$grade.'",que_num:"'.$que_num.'",percent:"'.$percent.'",timer:"'.$timer.'"}';

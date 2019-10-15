@@ -10,21 +10,44 @@ var storage=window.localStorage;//获取当前locastorage中值
 var grade=storage.grade;//年级
 var unit=storage.unit;//单元
 
-var relgrade=String((parseInt(grade)+1)/2);//换算成真正的年级
+//var relgrade=String((parseInt(grade)+1)/2);//换算成真正的年级
 //alert(grade);
 //alert(unit);
 //用来显示标题
 function showtitle(){
 	var title=window.document.getElementById("leixing1");
 	//alert(title);
-	if(grade%2)
-	title.innerHTML=
+	if(grade=='1'){
+		title.innerHTML=
 	"<h1 style='color:#000;' class='leixing' style='float:none' text-align='center;' width='120px;' height='35px;'>"
-	+relgrade+" 年级上第 "+unit+" 单元"+"</h1>"
-	else
-	title.innerHTML=
+	+" 一年级上第 "+unit+" 单元"+"</h1>"
+	}
+	else if(grade=='2'){
+		title.innerHTML=
 	"<h1 style='color:#000;' class='leixing' style='float:none' text-align='center;' width='120px;' height='35px;'>"
-	+relgrade+" 年级下第 "+unit+" 单元"+"</h1>"
+	+" 一年级下第 "+unit+" 单元"+"</h1>"
+	}
+	else if(grade=='3'){
+		title.innerHTML=
+	"<h1 style='color:#000;' class='leixing' style='float:none' text-align='center;' width='120px;' height='35px;'>"
+	+" 二年级上第 "+unit+" 单元"+"</h1>"
+	}
+	else if(grade=='4'){
+		title.innerHTML=
+	"<h1 style='color:#000;' class='leixing' style='float:none' text-align='center;' width='120px;' height='35px;'>"
+	+" 二年级下第 "+unit+" 单元"+"</h1>"
+	}
+	else if(grade=='5'){
+		title.innerHTML=
+	"<h1 style='color:#000;' class='leixing' style='float:none' text-align='center;' width='120px;' height='35px;'>"
+	+" 三年级上第 "+unit+" 单元"+"</h1>"
+	}
+	else {
+		title.innerHTML=
+	"<h1 style='color:#000;' class='leixing' style='float:none' text-align='center;' width='120px;' height='35px;'>"
+	+" 三年级下第 "+unit+" 单元"+"</h1>"
+	}
+	
 }
 
 
@@ -34,15 +57,15 @@ function product_suanshi(){
 	start();//开始计时
     var obj=window.document.getElementById("select_number");//获取选题数
 	number=obj.options[obj.selectedIndex].value;//总题数
-	var suanshi = new Array(); //先声明数组
     // for(var k=0;k<number;k++){ //一维长度为要生成算式个数
 	// 	suanshi[k]=new Array(); //声明二维，每一个一维数组里面的一个元素都是一个数组，这个数组有两个元素，都是字符形式；
 	// 							//第一个是运算式，第二个是答案（运算式带等号）
 	// }
+	alert(grade+unit+number);
 	$.ajax({
 		type: "post",
 		url: "php/ques_gen.php",//指示使用的PHP文件
-		data: {grade:grade,unit:unit,num:number},//提交到php的数据
+		data: {grade:parseInt(grade),unit:parseInt(unit),num:parseInt(number)},//提交到php的数据
 		dataType: "json",
 		success: function(arr){
             //将以json字符串格式返回的数据变成json的对象
@@ -50,8 +73,24 @@ function product_suanshi(){
             // json = eval("("+suanshi+")"); 
 			// alert(json.name);
 			// ss=suanshi;
-			alter("接收成功！"+arr);
-			suanshi=array;
+			alert("接收成功！"+arr);
+			ss=arr;
+			var ul=document.getElementById("neirong_ul");
+	//ul.remove();
+	$(ul).html("");
+	for(k=0;k<number;k++){
+    var li=document.createElement("li");
+    li.innerHTML =
+        '<p class="shizi" style="color:#000;">'+ss[k].formu+
+		'<input type="text" class="shuru" size="3" />'+
+        '<span class="daan_show" ></span>'+
+        '<i class="s_jieguo" style="display:inline;"></i>'+
+		'</p>'
+	//$("#shuru1").attr("")
+    ul.appendChild(li);
+		//$('.document').append(li);
+	}
+			
         },
         //未成功接收时的处理
         error:function(student_data){
@@ -61,21 +100,21 @@ function product_suanshi(){
 	  });   
 	//var suanshi=product(number);
 	//ss=suanshi;
-	var ul=document.getElementById("neirong_ul");
-	//ul.remove();
-	$(ul).html("");
-	for(k=0;k<number;k++){
-    var li=document.createElement("li");
-    li.innerHTML =
-        '<p class="shizi" style="color:#000;">'+suanshi[k].formu+
-		'<input type="text" class="shuru" size="3" />'+
-        '<span class="daan_show" ></span>'+
-        '<i class="s_jieguo" style="display:inline;"></i>'+
-		'</p>'
-	//$("#shuru1").attr("")
-    ul.appendChild(li);
-		//$('.document').append(li);
-	}
+	// var ul=document.getElementById("neirong_ul");
+	// //ul.remove();
+	// $(ul).html("");
+	// for(k=0;k<number;k++){
+    // var li=document.createElement("li");
+    // li.innerHTML =
+    //     '<p class="shizi" style="color:#000;">'+ss[k].formu+
+	// 	'<input type="text" class="shuru" size="3" />'+
+    //     '<span class="daan_show" ></span>'+
+    //     '<i class="s_jieguo" style="display:inline;"></i>'+
+	// 	'</p>'
+	// //$("#shuru1").attr("")
+    // ul.appendChild(li);
+	// 	//$('.document').append(li);
+	// }
 }
 
 function toDub(n){  //补0操作
@@ -148,6 +187,7 @@ function product_dengshi(){
 	var logjudge=1;
 	var storage=window.localStorage;//获取当前locastorage中值
 	var userid = storage.getItem("id");
+	alert(userid);
 
 	$.ajax({
 		type: "post",

@@ -19,15 +19,17 @@ $grade_array=array(null,"first_grade_up","first_grade_down","second_grade_up","s
 //在数据库中随机读取num道算式
 $ques=array();
 if($link){
-    $result=mysqli_query($link,"select * from ".$grade_array[$grade]." where unit=1 order by rand() limit 10");
+    $result=mysqli_query($link,"select * from ".$grade_array[$grade]." where unit=".$unit." order by rand() limit ".$num."");
     // echo $result;
     if($result){
         $row=mysqli_fetch_all($result);
         //echo $row+"2";
         for($i=0;$i<$num;$i++){
-            $ques[$i]=array("formu"=>$row[$i][1],"value"=>$row[$i][2]);
+            $ques[$i]=array("formu"=>$row[$i][1]."=","value"=>$row[$i][2]);
         }
     }
+    else
+     echo "eero";
 }
 
 //返回json字符串
