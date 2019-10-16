@@ -4,11 +4,15 @@
     margin: 0;
     border: 0;
 }
-/*html{
-    height:100%;
-}*/
+html{
+    min-height:100%;
+}
 body {
-    /*height: 100%;*/
+    background-repeat: no-repeat;
+    background-image:url(./image/background.jpg)  no-repeat center center;
+    background-size:cover;
+    background-attachment:fixed;
+    min-height:100%;
     margin: 0 auto;
     background-color: #000;
     text-align: center;
@@ -24,6 +28,7 @@ body {
     height: 100%;
     margin:0 auto;
     text-align:center;
+    opacity: 0.9;
     }
 .first_title{
     width: 100%;

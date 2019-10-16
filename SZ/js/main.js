@@ -1,10 +1,11 @@
 var storage=window.localStorage;//获取当前locastorage中值
 function openweb(){
-    window.open('stu_info.html');
-    // if (storage.identity.value=='1')
-    //    window.open('su_info.html');
-    // else
-    //    window.open('tea_info.html');
+    //window.open('stu_info.html');
+    //alert(storage.identity);
+    if (storage.identity==1)
+       window.open('stu_info.html');
+     else
+       window.open('tea_info.html');
 }
 
 function opensuanshi(btn1,btn2){

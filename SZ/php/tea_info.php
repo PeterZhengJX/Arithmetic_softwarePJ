@@ -1,37 +1,67 @@
 <?php
 header('Content-type:text/json;charset=utf-8');
 //网页输入读取
-//$id="11112";
+//$id="123";
 $id=$_POST['id'];
 //连接数据库
-$link=mysqli_connect(
+$link_tea=mysqli_connect(
     'localhost',
     'root',
     '2925473239zjx',
     'teachers'
 );
-//设置年级1~3
-$grade_array=array(null,"first_grade","second_grade","third_grade");
-//解析传入的学号
+$link_stu=mysqli_connect(
+    'localhost',
+    'root',
+    '2925473239zjx',
+    'students'
+);
+//解析传入的工号
 $str_id="".$id;
-$grade=intval(substr($str_id,0,1));
-$find=0;
 $que_num=0;
 $percent="";
 $timer="";
 $data=null;
-if($link){
-    $result=mysqli_fetch_array(mysqli_query($link,"select * from ".$grade_array[$grade]." where id='$str_id'"));
+$name="";
+$second=0;
+$minute=0;
+$hour=0;
+if($link_tea&&$link_stu){
+    //获取老师姓名
+    $reuslt=mysqli_fetch_array(mysqli_query($link_tea,"select * from teacher_info where id='$id'"));
+    if($reuslt)
+        $name=$reuslt["name"];
+    //获取数据库中学生总做题数，平均正确率，做题总时间
+    $que_num=mysqli_fetch_array(mysqli_query($link_stu,"SELECT sum(que_num) FROM stu_info"))[0];
+    $right_num=mysqli_fetch_array(mysqli_query($link_stu,"SELECT sum(right_num) FROM stu_info"))[0];
+    if($que_num!=0)
+            $percent="".round((float)$right_num/$que_num*100,2)."%";
+    else
+            $percent=0;
+    $result=mysqli_query($link_stu,"SELECT timer FROM stu_info");//计算做题总时间
     if($result){
-        $find=1;
-        $que_num=$result["que_num"];
-        $percent="".round((float)$result["right_num"]/$que_num*100,2)."%";
-        $timer="".intval(substr($result["timer"],4))."时".intval(substr($result["timer"],2,2))."分".intval(substr($result["timer"],0,2))."秒";
+        $row=mysqli_fetch_all($result);
+        $row_num=sizeof($row);
+        for($i=0;$i<$row_num;$i++){
+            $second+=intval(substr($row[$i][0],0,2));
+            if($second>=60){
+                $minute++;
+                $second-=60;
+            }
+            $minute+=intval(substr($row[$i][0],2,2));
+            if($minute>=60){
+                $hour++;
+                $minute-=60;
+            }
+            $hour+=intval(substr($row[$i][0],4));
+        }
     }
-    $data='{find:"'.$find.'",name:"'.$result["name"].'",grade:"'.$grade.'",que_num:"'.$que_num.'",percent:"'.$percent.'",timer:"'.$timer.'"}';
+    $timer="".$hour."时".$minute."分".$second."秒";
+    $data='{name:"'.$name.'",que_num:"'.$que_num.'",percent:"'.$percent.'",timer:"'.$timer.'"}';
 }
 //返回json字符串
 echo json_encode($data);
 //关闭数据库
-mysqli_close($link);
+mysqli_close($link_stu);
+mysqli_close($link_tea);
 ?>

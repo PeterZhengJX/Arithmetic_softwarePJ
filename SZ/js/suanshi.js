@@ -10,7 +10,14 @@ var storage=window.localStorage;//获取当前locastorage中值
 var grade=storage.grade;//年级
 var unit=storage.unit;//单元
 
-//var relgrade=String((parseInt(grade)+1)/2);//换算成真正的年级
+function openweb(){
+    //window.open('stu_info.html');
+    if (storage.identity.value=='1')
+       window.open('su_info.html');
+     else
+       window.open('tea_info.html');
+}
+
 //alert(grade);
 //alert(unit);
 //用来显示标题
@@ -61,7 +68,7 @@ function product_suanshi(){
 	// 	suanshi[k]=new Array(); //声明二维，每一个一维数组里面的一个元素都是一个数组，这个数组有两个元素，都是字符形式；
 	// 							//第一个是运算式，第二个是答案（运算式带等号）
 	// }
-	alert(grade+unit+number);
+	//alert(grade+unit+number);
 	$.ajax({
 		type: "post",
 		url: "php/ques_gen.php",//指示使用的PHP文件
@@ -73,7 +80,7 @@ function product_suanshi(){
             // json = eval("("+suanshi+")"); 
 			// alert(json.name);
 			// ss=suanshi;
-			alert("接收成功！"+arr);
+			//alert("接收成功！"+arr);
 			ss=arr;
 			var ul=document.getElementById("neirong_ul");
 	//ul.remove();
@@ -185,15 +192,29 @@ function product_dengshi(){
 	}
 	correctnumber.innerHTML=correct+"/"+number;
 	var logjudge=1;
-	var storage=window.localStorage;//获取当前locastorage中值
+	storage=window.localStorage;//获取当前locastorage中值
 	var userid = storage.getItem("id");
-	alert(userid);
-
+	//var userid1=storage.getItem("id");
+	//alert(typeof(grade)+grade);
+	var aa=1;
+	var abb=parseInt(storage.grade);
+	var bb=parseInt(storage.unit);
+	//alert(typeof(abb));
+	//alert(typeof(logjudge)+typeof(number)+typeof(correct)+typeof(str)+typeof(storage.grade)+typeof(storage.unit));
 	$.ajax({
 		type: "post",
-		url: "php/questionaire.php",//指示使用的PHP文件
-		data: {id:userid,login:logjudge,que_num:number,right_num:correct,timer:str,answer:answer},//提交到login_in.php的数据，注意！！！！这里加上了一个做题结果的数组
-		dataType: "json"
+		url: "php/test.php",//指示使用的PHP文件
+		data:{id:userid,login:logjudge,que_num:parseInt(number),right_num:correct,timer:str,abb:abb,bb:bb},//unit:parseInt(storage.unit)},//提交到login_in.php的数据，注意！！！！这里加上了一个做题结果的数组
+		dataType: "json",
+		success:function(data){
+			//alert(data);
+		},
+		error:function(XMLHttpRequest, textStatus, errorThrown){
+			alert(XMLHttpRequest.status);
+			alert(XMLHttpRequest.readyState);  
+			alert(textStatus);
+			alert(errorThrown);
+		}
 	  });   
 
 }

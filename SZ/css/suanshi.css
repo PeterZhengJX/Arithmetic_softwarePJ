@@ -17,6 +17,10 @@ body {
     padding: 0;
   /*margin: 0;*/
     border: 0;
+    background-repeat: no-repeat;
+    background-image:url(./image/sky.jpg)  no-repeat center center;
+    background-size:cover;
+    background-attachment:fixed;
 }
 .secondbg {
     color:#FFFFFF;
@@ -25,6 +29,7 @@ body {
     height: 100%;
     margin:0 auto;
     text-align:center;
+    opacity: 0.9;
     }
 .first_title{
     clear: both;
@@ -78,7 +83,7 @@ input.text{
 
 .all_an_1 {    
     font-size: 14px;    
-    font-family: 宋体;
+    font-family: "YouYuan";
     width: 120px;    
     height: 28px;    
     line-height: 28px;   
