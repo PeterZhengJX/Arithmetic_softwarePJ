@@ -162,7 +162,7 @@ body {
 }
 #show_record{
     margin: 10px auto;
-    text-align: start;
+    text-align: center;
     border: solid;
     height: 1000px;
     width: 95%;
@@ -216,11 +216,8 @@ body {
     width:100%;
     size: 4;
 }
-/* 显示详细信息的块 */
-#show_table{
-   text-align: left;
-   padding-top: 0%;
-}
+
+
 /* 单元选择按钮 */
 .sel_grade{
     font-family: "YouYuan";
@@ -242,17 +239,47 @@ body {
     background-color: rgb(103, 105, 105);
 
 }
-#right_table{
+#show_table_div{
     font-family: "YouYuan";
-    margin: 5px;
+    margin: 5px auto;
     padding: 5px;
-    width:75%;
-    height:400px;
+    width:70%;
+    min-height:400px;
     display:inline-block;
     text-align: center;   
     color: #000;
     border: 0;  
+    vertical-align: top; 
+    /* vertical-align:middle; */
 }
+#right_table{
+    font-family: "YouYuan";
+    margin: 5px;
+    padding: 5px;
+    width:70%;
+    min-height:400px;
+    display:inline-block;
+    text-align:right;   
+    color: #000;
+    border: 0;  
+    vertical-align: top;
+    text-align: center;
+}
+/* 显示详细信息的块 */
+#show_table{
+    font-family: "YouYuan";
+    margin: 0px;
+    padding: 0px;
+    width:100%;
+    min-height:10px;
+    /* display:inline-block; */
+    text-align:right;   
+    color: #000;
+    border: 0;  
+    vertical-align: top;
+    text-align: center;
+}
+
 
 .td_show{
     color: #000;

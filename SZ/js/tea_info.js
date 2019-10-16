@@ -59,7 +59,7 @@ function tableload(sgrade,sunit){
 		dataType: "json",
 		success: function(marks){//返回表单
             //将以json字符串格式返回的数据变成json的对象
-            var showtable=window.document.getElementById("show_table");
+            var showtable=window.document.getElementById("show_table_div");
             showtable.innerHTML=marks;//展示返回表单
         },
         //未成功接收时的处理
@@ -79,7 +79,7 @@ function stu_tableload(){
 		dataType: "json",
 		success: function(table){//返回表单
             //将以json字符串格式返回的数据变成json的对象
-            var showtable=window.document.getElementById("show_table");
+            var showtable=window.document.getElementById("show_table_div");
             showtable.innerHTML=table;//展示返回表单
         },
         //未成功接收时的处理
