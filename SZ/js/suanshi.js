@@ -203,7 +203,7 @@ function product_dengshi(){
 	//alert(typeof(logjudge)+typeof(number)+typeof(correct)+typeof(str)+typeof(storage.grade)+typeof(storage.unit));
 	$.ajax({
 		type: "post",
-		url: "php/test.php",//指示使用的PHP文件
+		url: "php/questionaire.php",//指示使用的PHP文件
 		data:{id:userid,login:logjudge,que_num:parseInt(number),right_num:correct,timer:str,abb:abb,bb:bb},//unit:parseInt(storage.unit)},//提交到login_in.php的数据，注意！！！！这里加上了一个做题结果的数组
 		dataType: "json",
 		success:function(data){

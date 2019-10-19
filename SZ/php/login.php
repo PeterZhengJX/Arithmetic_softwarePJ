@@ -1,21 +1,30 @@
 <?php
+/*
+login.php说明：
+实现登录功能。
+实现：从网页获取账号密码输入，在数据库中匹配账号密码，返回是否查询到账号和密码是否正确
+输入：
+identity（用户身份1位学生，0为教师；网页端标识identity）
+id(用户账号；网页端标识：id)
+password（用户密码；网页端标识：password）
+输出：
+login（用户是否存在）
+pwd_right（密码是否正确）
+*/
 header('Content-type:text/json;charset=utf-8');
 //网页输入读取
-// $identity=1;
-// $id="11112";
-// $password="U23";
 $identity=$_POST['identity'];
 $id=$_POST['id'];
 $password=$_POST['password'];
-//连接数据库
-if($identity==0){
+//通过identity确认登录者身份，分别连接学生、老师数据库
+if($identity==0){//当identity为0时，与老师数据库建立链接
     $link=mysqli_connect(
         'localhost',
         'root',
         '2925473239zjx',
         'teachers'
     );
-}else{
+}else{//当identity为1时，与学生数据库建立链接
     $link=mysqli_connect(
         'localhost',
         'root',
@@ -23,18 +32,20 @@ if($identity==0){
         'students'
     );
 }
-$str_identity=array("teacher_info","stu_info");
-$str_id="".$id;
-$login=0;
-$pwd_right=0;
-if($link){
+
+$str_identity=array("teacher_info","stu_info");//老师学生信息表名，通过identity访问
+$str_id="".$id;//将输入id转为字符串
+$login=0;//已存在标志初始化置零
+$pwd_right=0;//密码正确标志初始化置零
+if($link){//当链接建立成功时，访问数据库，取出身份记录表中id为输入id的记录
     $result=mysqli_fetch_array(mysqli_query($link,"select * from ".$str_identity[$identity]." where id='$str_id'"));
-    if($result){
+    if($result){//当正确取出时，设置账号存在。此时若密码匹配，则设置密码正确
         $login=1;
         if($result["password"]==$password)
             $pwd_right=1;
     }
 }
+
 //构造返回json字符串
 $data='{login:"'.$login.'",pwd_right:"'.$pwd_right.'"}';
 //返回json字符串

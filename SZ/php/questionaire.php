@@ -1,20 +1,29 @@
 <?php
+/*
+questionaire.php说明：
+实现本次做题结果记录功能。能根据网页输入修改数据库中原有的做题记录
+实现：从网页获取账号、登录状态（login）、做题数（que_num)、正确数（right_num）、做题时长（timer）、年级（grade）、单元（unit）
+分别向数据库中的两张表stu_info、ques_each写入做题状态
+输入：
+id（账号;网页端标识：id)
+login(登录状态；网页端标识：login)
+que_num（做题数量；网页端标识：que_num）
+right_num（正确数；网页端标识：right_num）
+timer（做题时长；网页端标识：timer）
+grade（年级；网页端标识：grade）
+unit（单元；网页端标识：unit）
+输出：
+无
+*/
 header('Content-type:text/json;charset=utf-8');
 //网页输入读取
-// $grade=1;
-// $unit=3;
-// $id="11111";
-// $login=1;
-// $que_num=10;
-// $right_num=1;
-// $timer="00时00分03秒";
 $id=$_POST['id'];
 $login=$_POST['login'];
 $que_num=$_POST['que_num'];
 $right_num=$_POST['right_num'];
 $timer=$_POST['timer'];
-$grade=$_post['abb'];
-$unit=$_post['bb'];
+$grade=$_POST['abb'];
+$unit=$_POST['bb'];
 //连接数据库
 $link=mysqli_connect(
     'localhost',
@@ -22,66 +31,52 @@ $link=mysqli_connect(
     '2925473239zjx',
     'students'
 );
-if($login==1){
-       //解析timer
-    $hour=intval(substr($timer,0,2));
-    $minute=intval(substr($timer,5,2));
-    $second=intval(substr($timer,10,2));
-    $hour_total=0;
-    $minute_total=0;
-    $second_total=0;
-    $que_num_total=0;
-    $right_num_total=0;
-    if($link){
-        //将数据库中的学生个人记录和题目页面记录求和
-        $result=mysqli_fetch_array(mysqli_query($link,"select * from stu_info where id='$id'"));
-        $second_total=intval(substr($result["timer"],0,2))+$second;
-        if($second_total>=60){
-            $minute_total++;
-            $second_total-=60;
-        }
-        $minute_total=intval(substr($result["timer"],2,2))+$minute;
-        if($minute_total>=60){
-            $hour_total++;
-            $minute_total-=60;
-        }
-        $hour_total=intval(substr($result["timer"],4))+$hour;
-        $timer_total="".str_pad("".$second_total,2,"0",STR_PAD_LEFT)."".str_pad("".$minute_total,2,"0",STR_PAD_LEFT)."".str_pad("".$hour_total,6,"0",STR_PAD_LEFT)."";
-        $que_num_total=$result["que_num"]+$que_num;
-        $right_num_total=$result["right_num"]+$right_num;
-        if($que_num!=0)
-            $percent=$right_num_total/$que_num_total*100;
-        else
-            $percent=0;
-        mysqli_query($link,"update stu_info set que_num='$que_num_total',right_num='$right_num_total',timer='$timer_total',right_lev='$percent' where id='$id'");
-
-        //将数据库中保存学生各单元情况的记录与题目页面求和
-        $result=mysqli_fetch_array(mysqli_query($link,"select * from ques_each where id='$id' and grade='$grade' and unit='$unit'"));
-        $second_total=intval(substr($result["timer"],0,2))+$second;
-        if($second_total>=60){
-            $minute_total++;
-            $second_total-=60;
-        }
-        $minute_total=intval(substr($result["timer"],2,2))+$minute;
-        if($minute_total>=60){
-            $hour_total++;
-            $minute_total-=60;
-        }
-        $hour_total=intval(substr($result["timer"],4))+$hour;
-        $timer_total="".str_pad("".$second_total,2,"0",STR_PAD_LEFT)."".str_pad("".$minute_total,2,"0",STR_PAD_LEFT)."".str_pad("".$hour_total,6,"0",STR_PAD_LEFT)."";
-        $que_num_total=$result["que_num"]+$que_num;
-        $right_num_total=$result["right_num"]+$right_num;
-        if($que_num!=0)
-            $percent=$right_num_total/$que_num_total*100;
-        else
-            $percent=0;
-        mysqli_query($link,"update ques_each set que_num='$que_num_total',right_num='$right_num_total',timer='$timer_total',right_lev='$percent' where id='$id' and grade='$grade' and unit='$unit'");
-        
+//解析timer
+$hour=intval(substr($timer,0,2));//时段0~2
+$minute=intval(substr($timer,5,2));//分段5~6
+$second=intval(substr($timer,10,2));//秒段10~11
+//表数组graph_str
+$graph_str=array("stu_info","ques_each");
+if($login==1){//仅在登录之后记录做题状态
+    for($i=0;$i<2;$i++){//通过循环写入两张表stu_info和ques_each
+        //初始置零
+        $hour_total=0;
+        $minute_total=0;
+        $second_total=0;
+        $que_num_total=0;
+        $right_num_total=0;
+        if($link){
+            //将数据库表中的学生个人记录和题目页面记录求和
+            $result=mysqli_fetch_array(mysqli_query($link,"select * from ".$graph_str[$i]." where id='$id'"));
+            //解析所有的timer并求和
+            $second_total=intval(substr($result["timer"],0,2))+$second;
+            if($second_total>=60){//越界上加并求模
+                $minute_total++;
+                $second_total-=60;
+            }
+            $minute_total=intval(substr($result["timer"],2,2))+$minute;
+            if($minute_total>=60){
+                $hour_total++;
+                $minute_total-=60;
+            }
+            $hour_total=intval(substr($result["timer"],4))+$hour;
+            $timer_total="".str_pad("".$second_total,2,"0",STR_PAD_LEFT)."".str_pad("".$minute_total,2,"0",STR_PAD_LEFT)."".str_pad("".$hour_total,6,"0",STR_PAD_LEFT)."";
+            //生成新的做题数和正确数
+            $que_num_total=$result["que_num"]+$que_num;
+            $right_num_total=$result["right_num"]+$right_num;
+            //计算新的正确率
+            if($que_num!=0)//若做题总数为0，正确率直接置零
+                $percent=$right_num_total/$que_num_total*100;
+            else
+                $percent=0;
+            //更新数据库表中记录
+            mysqli_query($link,"update ".$graph_str[$i]." set que_num='$que_num_total',right_num='$right_num_total',timer='$timer_total',right_lev='$percent' where id='$id'");
     }
 }
-//$result=1;
-//$data='{login:"'.$login.'"}';
-// echo json_encode($grade);
 //关闭数据库
 mysqli_close($link);
+
+$login=1;
+//返回json字符串
+echo json_encode($grade);
 ?>

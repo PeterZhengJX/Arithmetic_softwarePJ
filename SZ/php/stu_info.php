@@ -1,7 +1,20 @@
 <?php
+/*
+stu_info.php说明：
+实现学生总成绩显示功能。能显示学生的做题数、时间及正确率等数据
+实现：从数据库获取相应id的成绩，计算正确率，同时返回
+输入：
+id（账号;网页端标识：id)
+输出：
+find(是否查询成功)
+name（用于姓名）
+grade（用户年级）
+que_num（总做题数）
+percent（正确率）
+timer（做题时间）
+*/
 header('Content-type:text/json;charset=utf-8');
 //网页输入读取
-// $id="11112";
 $id=$_POST['id'];
 //连接数据库
 $link=mysqli_connect(
@@ -10,25 +23,24 @@ $link=mysqli_connect(
     '2925473239zjx',
     'students'
 );
-//解析传入的学号
+//解析传入的学号，记录用户年级
 $str_id="".$id;
 $grade=intval(substr($str_id,0,1));
+//各数据初始化
 $find=0;
 $que_num=0;
 $percent="";
 $timer="";
 $data=null;
 if($link){
-    $result=mysqli_fetch_array(mysqli_query($link,"select * from stu_info where id='$str_id'"));
-    if($result){
+    $result=mysqli_fetch_array(mysqli_query($link,"select * from stu_info where id='$str_id'"));//取出学生总成绩表中id对应的记录
+    if($result){//取出数据后记录总做题数、正确率、做题时间
         $find=1;
         $que_num=$result["que_num"];
         $percent="".$result["right_lev"]."%";
+        $name=$result["name"];
         $timer="".intval(substr($result["timer"],4))."时".intval(substr($result["timer"],2,2))."分".intval(substr($result["timer"],0,2))."秒";
     }
-    $name=$result["name"];
-    // $result=mysqli_fetch_array(mysqli_query($link,"SELECT temp.pm FROM (SELECT @rownum:=@rownum+1 pm,`stu_info`.* FROM (SELECT @rownum:=0) a, `stu_info` ORDER BY `que_num`,`id`) temp WHERE temp.id = '11112'"));
-    // $rank=$result[0];
     $data='{find:"'.$find.'",name:"'.$name.'",grade:"'.$grade.'",que_num:"'.$que_num.'",percent:"'.$percent.'",timer:"'.$timer.'"}';
 }
 //返回json字符串

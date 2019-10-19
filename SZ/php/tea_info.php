@@ -1,7 +1,18 @@
 <?php
+/*
+tea_info.php说明：
+实现教师身份信息显示和总学生信息显示功能。
+实现：从数据库获取相应教师id的附加信息，同时计算所有学生信息
+输入：
+id（教师工号;网页端标识：id)
+输出：
+name(教师名)
+que_num（所有学生总做题数）
+percent（所有学生总正确率）
+timer（所有学生总做题时长）
+*/
 header('Content-type:text/json;charset=utf-8');
 //网页输入读取
-//$id="123";
 $id=$_POST['id'];
 //连接数据库
 $link_tea=mysqli_connect(
@@ -16,7 +27,7 @@ $link_stu=mysqli_connect(
     '2925473239zjx',
     'students'
 );
-//解析传入的工号
+//初始数据全部置零
 $str_id="".$id;
 $que_num=0;
 $percent="";
@@ -26,6 +37,7 @@ $name="";
 $second=0;
 $minute=0;
 $hour=0;
+
 if($link_tea&&$link_stu){
     //获取老师姓名
     $reuslt=mysqli_fetch_array(mysqli_query($link_tea,"select * from teacher_info where id='$id'"));
@@ -38,11 +50,11 @@ if($link_tea&&$link_stu){
             $percent="".round((float)$right_num/$que_num*100,2)."%";
     else
             $percent=0;
-    $result=mysqli_query($link_stu,"SELECT timer FROM stu_info");//计算做题总时间
+    $result=mysqli_query($link_stu,"SELECT timer FROM stu_info");//获取表中所有学生的做题总时间
     if($result){
         $row=mysqli_fetch_all($result);
         $row_num=sizeof($row);
-        for($i=0;$i<$row_num;$i++){
+        for($i=0;$i<$row_num;$i++){//循环累加计算总做题时间
             $second+=intval(substr($row[$i][0],0,2));
             if($second>=60){
                 $minute++;

@@ -1,27 +1,24 @@
 <?php
+/*
+sign.php说明：
+实现注册功能。能根据网页输入修改数据库中原有的信息表
+实现：从网页获取账号、用户名、密码，写入数据库
+分别向数据库中的两张表stu_info、ques_each写入做题状态
+输入：
+id（账号;网页端标识：id)
+identity(身份；网页端标识：identity)
+name（用户名；网页端标识：name）
+password（密码；网页端标识：password）
+输出：
+sign(是否注册成功)
+exist（账号是否已存在）
+*/
 header('Content-type:text/json;charset=utf-8');
 //网页输入读取
-// $identity=0;
-// $id='123';
-// $name='li';
-// $password='123';
 $identity=$_POST['identity'];
 $id=$_POST['id'];
 $name=$_POST['name'];
 $password=$_POST['password'];
-//连接数据库
-$link_stu=mysqli_connect(
-    'localhost',
-    'root',
-    '2925473239zjx',
-    'students'
-);
-$link_tea=mysqli_connect(
-    'localhost',
-    'root',
-    '2925473239zjx',
-    'teachers'
-);
 //解析老师端还是学生端，老师端为0，学生端1
 $str_identity=array("teacher_info","stu_info");
 //解析传入的学号
@@ -29,8 +26,15 @@ $str_id="".$id;
 $sign=0;
 $exist=0;
 if($identity==0){
+    //连接数据库
+    $link_tea=mysqli_connect(
+        'localhost',
+        'root',
+        '2925473239zjx',
+        'teachers'
+    );
     if($link_tea){
-        $result=mysqli_query($link_tea,"select count(id) from ".$str_identity[$identity]." where id='$str_id'");
+        $result=mysqli_query($link_tea,"select count(id) from ".$str_identity[$identity]." where id='$str_id'");//查看账号是否存在
         if($result){
             $data_num=mysqli_fetch_array($result);
             if($data_num[0]==0){//若不存在则插入，设置sign=1，表示登录成功
@@ -43,13 +47,20 @@ if($identity==0){
         }
     }
 }else{
+    //连接数据库
+    $link_stu=mysqli_connect(
+        'localhost',
+        'root',
+        '2925473239zjx',
+        'students'
+    );
     if($link_stu){
-        $result=mysqli_query($link_stu,"select count(id) from ".$str_identity[$identity]." where id='$str_id'");
+        $result=mysqli_query($link_stu,"select count(id) from ".$str_identity[$identity]." where id='$str_id'");//查看账号是否存在
         if($result){
             $data_num=mysqli_fetch_array($result);
             if($data_num[0]==0){//若不存在则插入，设置sign=1，表示登录成功
                 $insert=mysqli_query($link_stu,"insert into stu_info values('$password','$name',0,0,'0000000000','$id',0) ");
-                for($i=1;$i<7;$i++){
+                for($i=1;$i<7;$i++){//循环初始化用户对应的ques_each表，初始化36个单元，以记录各单元做题结果
                     for($j=1;$j<7;$j++){
                         $insert=mysqli_query($link_stu,"insert into ques_each values('$i','$j',0,0,'0000000000','$id',0) ");
                     }
