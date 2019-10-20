@@ -1,8 +1,14 @@
+/* suanshi.js */
+/* 做题页面js文件 */
+// 所涉及函数：openweb()、showtitle()、product_suanshi()、toDub(n)、start()、product_dengshi()
+// 分别用于：打开个人页面、显示标题、与后端交互、显示算式、将数值转化为字符串、开始计时、对输入进行判断并向数据库返回结果
+
+
 
 var ss;//全局变量，用于存储算式答案
 var mytime;//用以计时
 var h,m,s,ms;//用以计时
-var str;
+var str;//用以记录时间字符串
 var time;
 var correct;//用以计数正确题目数
 var number;//用以收集总题数
@@ -10,20 +16,19 @@ var storage=window.localStorage;//获取当前locastorage中值
 var grade=storage.grade;//年级
 var unit=storage.unit;//单元
 
+// 打开页面，根据储存在本地的身份值判断要打开什么页面
 function openweb(){
-    //window.open('stu_info.html');
-    if (storage.identity.value=='1')
-       window.open('su_info.html');
+    if (storage.identity==1)
+       window.location.href='stu_info.html';
      else
-       window.open('tea_info.html');
+       window.location.href='tea_info.html';
 }
 
-//alert(grade);
-//alert(unit);
 //用来显示标题
 function showtitle(){
+	// 获取要显示标题的地方
 	var title=window.document.getElementById("leixing1");
-	//alert(title);
+	// 对于获取的年级学期进行判断，进行不同的输出
 	if(grade=='1'){
 		title.innerHTML=
 	"<h1 style='color:#000;' class='leixing' style='float:none' text-align='center;' width='120px;' height='35px;'>"
@@ -59,44 +64,36 @@ function showtitle(){
 
 
 
-//显示算式的函数，包括调用产生函数的步骤
+//与后端交互、显示算式的函数
 function product_suanshi(){
 	start();//开始计时
     var obj=window.document.getElementById("select_number");//获取选题数
 	number=obj.options[obj.selectedIndex].value;//总题数
-    // for(var k=0;k<number;k++){ //一维长度为要生成算式个数
-	// 	suanshi[k]=new Array(); //声明二维，每一个一维数组里面的一个元素都是一个数组，这个数组有两个元素，都是字符形式；
-	// 							//第一个是运算式，第二个是答案（运算式带等号）
-	// }
-	//alert(grade+unit+number);
+   
+	// 与后端交互
 	$.ajax({
 		type: "post",
 		url: "php/ques_gen.php",//指示使用的PHP文件
 		data: {grade:parseInt(grade),unit:parseInt(unit),num:parseInt(number)},//提交到php的数据
 		dataType: "json",
 		success: function(arr){
-            //将以json字符串格式返回的数据变成json的对象
-            // var json='';
-            // json = eval("("+suanshi+")"); 
-			// alert(json.name);
-			// ss=suanshi;
-			//alert("接收成功！"+arr);
+			// 对要显示的字符串数组进行赋值
 			ss=arr;
+			// 得到要显示算式的位置
 			var ul=document.getElementById("neirong_ul");
-	//ul.remove();
-	$(ul).html("");
-	for(k=0;k<number;k++){
-    var li=document.createElement("li");
-    li.innerHTML =
-        '<p class="shizi" style="color:#000;">'+ss[k].formu+
-		'<input type="text" class="shuru" size="3" />'+
-        '<span class="daan_show" ></span>'+
-        '<i class="s_jieguo" style="display:inline;"></i>'+
-		'</p>'
-	//$("#shuru1").attr("")
-    ul.appendChild(li);
-		//$('.document').append(li);
-	}
+			$(ul).html("");//清空此位置（此举可支持多次生成）
+			// for循环，根据所选择的算式个数生成算式
+	        for(k=0;k<number;k++){
+				var li=document.createElement("li");//创建一个“li”
+				//将所需内容添加到“li”中
+    			li.innerHTML =
+        			'<p class="shizi" style="color:#000;">'+ss[k].formu+
+					'<input type="text" class="shuru" size="3" />'+
+        			'<span class="daan_show" ></span>'+
+        			'<i class="s_jieguo" style="display:inline;"></i>'+
+					'</p>'
+    			ul.appendChild(li);//将“li”添加到“ul”中
+			}//end of for
 			
         },
         //未成功接收时的处理
@@ -105,25 +102,10 @@ function product_suanshi(){
             alert("服务器连接出错！");
         }
 	  });   
-	//var suanshi=product(number);
-	//ss=suanshi;
-	// var ul=document.getElementById("neirong_ul");
-	// //ul.remove();
-	// $(ul).html("");
-	// for(k=0;k<number;k++){
-    // var li=document.createElement("li");
-    // li.innerHTML =
-    //     '<p class="shizi" style="color:#000;">'+ss[k].formu+
-	// 	'<input type="text" class="shuru" size="3" />'+
-    //     '<span class="daan_show" ></span>'+
-    //     '<i class="s_jieguo" style="display:inline;"></i>'+
-	// 	'</p>'
-	// //$("#shuru1").attr("")
-    // ul.appendChild(li);
-	// 	//$('.document').append(li);
-	// }
+	
 }
 
+// 将数值转化为字符串
 function toDub(n){  //补0操作
 	if(n<10){
 	  return "0"+n;
@@ -133,6 +115,7 @@ function toDub(n){  //补0操作
 	}
   }
 
+// 开始计时函数
 function start(){
 	h=m=s=ms= 0;  //时，分，秒初始化为0；
   
@@ -160,17 +143,17 @@ function start(){
 
 //生成算式，返回字符串形式的算式和结果（点击“交卷”的结果）
 function product_dengshi(){
-	clearInterval(time);//停止时间
-	var inputs = document.getElementsByClassName("shuru");
-	var spans = document.getElementsByClassName("daan_show");
-	var iclass = document.getElementsByClassName("s_jieguo");
+	clearInterval(time);//停止计时
+	
+	var inputs = document.getElementsByClassName("shuru");//输入框
+	var spans = document.getElementsByClassName("daan_show");//显示答案的地方
+	var iclass = document.getElementsByClassName("s_jieguo");//收集结果
 	correct = 0;//计数正确题目的个数，清零
-	var correctnumber = document.getElementById("grade");
-	var obj=document.getElementById("select_number");
-	//用以记录做题结果
-	var answer=new Array();
+	var correctnumber = document.getElementById("grade");//显示得分的地方
+	var obj=document.getElementById("select_number");//获取用户选择的题数
 
-    for (var i = 0; i < inputs.length; i++) {
+	// 根据题目数，对每一个输入进行收集，进行相应的判断和记录
+	for (var i = 0; i < inputs.length; i++) {
       //判断这个元素是不是按钮
       if (inputs[i].type == "text") {
 		  inputs[i].style="display:none;";
@@ -190,30 +173,31 @@ function product_dengshi(){
         
       }
 	}
-	correctnumber.innerHTML=correct+"/"+number;
-	var logjudge=1;
+	correctnumber.innerHTML=correct+"/"+number;//显示得分
+
 	storage=window.localStorage;//获取当前locastorage中值
-	var userid = storage.getItem("id");
-	//var userid1=storage.getItem("id");
-	//alert(typeof(grade)+grade);
-	var aa=1;
+	var userid = storage.getItem("id");//从localstorage中获取用户id
+
+	var logjudge=1;//是否登录的检查
+	//若用户未登录，置0
+	if(userid=="admin")
+	logjudge=0;
+	// 获得选择的年级和单元，用于传递给数据库
 	var abb=parseInt(storage.grade);
 	var bb=parseInt(storage.unit);
-	//alert(typeof(abb));
-	//alert(typeof(logjudge)+typeof(number)+typeof(correct)+typeof(str)+typeof(storage.grade)+typeof(storage.unit));
+	
 	$.ajax({
 		type: "post",
-		url: "php/questionaire.php",//指示使用的PHP文件
-		data:{id:userid,login:logjudge,que_num:parseInt(number),right_num:correct,timer:str,abb:abb,bb:bb},//unit:parseInt(storage.unit)},//提交到login_in.php的数据，注意！！！！这里加上了一个做题结果的数组
+		url: "php/test.php",//指示使用的PHP文件
+		data:{id:userid,login:logjudge,que_num:parseInt(number),right_num:correct,timer:str,abb:abb,bb:bb},//提交到test.php的数据
 		dataType: "json",
+		// 交互成功，无返回
 		success:function(data){
-			//alert(data);
 		},
-		error:function(XMLHttpRequest, textStatus, errorThrown){
-			alert(XMLHttpRequest.status);
-			alert(XMLHttpRequest.readyState);  
-			alert(textStatus);
-			alert(errorThrown);
+		// 交互失败，提示
+		error:function(data){
+			//提示连接出错
+            alert("服务器连接出错！");
 		}
 	  });   
 

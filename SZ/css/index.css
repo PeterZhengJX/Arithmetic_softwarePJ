@@ -1,0 +1,114 @@
+/* index.css */
+/* 主页面样式 */
+
+
+*{
+    outline: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+html{
+    min-height:100%;
+}
+body {
+    background-repeat: no-repeat;
+    background-image:url(./image/background.jpg)  no-repeat center center;
+    background-size:cover;
+    background-attachment:fixed;
+    min-height:100%;
+    margin: 0 auto;
+    background-color: #000;
+    text-align: center;
+    outline: 0;
+    padding: 0;
+    border: 0;
+}
+.secondbg {
+    color:#FFFFFF;
+    background-color: #FFFFFF;
+    width:85%;
+    height: 100%;
+    margin:0 auto;
+    text-align:center;
+    opacity: 0.9;
+    }
+.first_title{
+    width: 100%;
+    height: 25px;
+}
+/* 个人中心按钮 */
+#personal_center {
+    margin: 4px;
+    height: 30px;
+    width: 70px;
+    border-radius: 6px;
+    background-color: rgb(225, 228, 227);
+    color: #000;
+    text-align: center;
+    cursor: pointer;
+}
+#personal_center:hover{
+    background-color: rgb(164, 168, 167);
+
+}
+#personal_center:active{
+    background-color: rgb(103, 105, 105);
+
+}
+/* 大标题 */
+.leixing {
+    font-family: "YouYuan";
+    margin: 0px;
+    padding: 15px;
+    text-align: center;
+}
+/* 学期框 */
+.left {
+    font-family: "YouYuan";
+    margin: 10px;
+    padding: 10px;
+    width:40%;
+    height:300px;
+    display:inline-block;
+    background-color: rgb(83, 83, 81);
+    text-align: center;
+    border-radius: 12px;    
+    border: 0;  
+}
+/* 分割灰线 */
+.huixian{
+    background-color: black;
+    width: 90%;
+    margin:0 auto;
+    height:5px;
+
+}
+/* 单元按钮 */
+.little_left {
+    font-family: "YouYuan";
+    margin: 10px;
+    padding: 2px;
+    width:40%;
+    height:60px;
+    display:inline-block;
+    background-color: rgb(225, 228, 227);
+    text-align: center;
+    border-radius: 5px;    
+    border: 0;  
+}
+.little_left:hover{
+    background-color: rgb(164, 168, 167);
+
+}
+.little_left:active{
+    background-color: rgb(103, 105, 105);
+
+}
+/* 年级标题 */
+.nianji{
+    margin-bottom: 5px;
+    color: #FFFFFF;
+    font-family: YouYuan;
+    size: 6;
+}

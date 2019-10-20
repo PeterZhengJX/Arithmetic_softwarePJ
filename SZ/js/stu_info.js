@@ -1,28 +1,19 @@
-//用以获得数据库传回信息
-var alltime;
-var percent;
-var allnum;
+/* stu_info.js */
+/* 学生个人中心页面js文件 */
+// 所涉及函数：show_information()、show_allnum()、show_alltime()、show_percent()、tableload(sgrade)
+// 分别用于：和数据库交互显示用户数据；显示做题总数、显示做题总时长、显示做题正确率、显示表格
+
+
+//用以从数据库中获得当前页面相关值
+var alltime;//做题时长
+var percent;//正确率
+var allnum;//做题总数
 var storage=window.localStorage;//获取当前locastorage中值
-var userid = storage.id;//获取用户id
+var userid = storage.id;//从本地获取用户id
 
-function show_information(){//用于与数据库沟通显示用户数据
-// var show_mes = new Array(); //存放从后台取得的数据，
-//     for(var k=0;k<30;k++){ //一维长度为一共的题目总数
-// 		show_mes[k]=new Array(); //声明二维，每一个一维数组里面的一个元素都是一个数组，这个数组有两个元素，都是字符形式；
-// 								//第一个是运算式，第二个是答案（运算式带等号）
-//     }
-//用于将从数据库中获取的数据输出到表格中,需要完善！！！！！！！！！！
-// for(var i=0;i<30;i++){
-//     for(var j=1;j<=5;j++){
-//         var show_td = document.getElementById(show_mes[i][0]+String(j));
-//         show_td.innerHTML = show_mes[i][j];
-//     }
-// }
-  
-//if(localStorage.getItem("id")==null)
-//alert(userid);
+//用于与数据库沟通显示用户数据
+function show_information(){
 
-    
     $.ajax({
         type: "post",
         url: "php/stu_info.php",//指示使用的PHP文件
@@ -33,15 +24,16 @@ function show_information(){//用于与数据库沟通显示用户数据
             //将以json字符串格式返回的数据变成json的对象
             var json='';
             json = eval("("+student_data+")"); 
-            //alert(json.name);
+            //将相关数据赋值
             alltime = json.timer;
             percent = json.percent;
             allnum = json.que_num;
+            //获取数据要显示的位置，进行显示
             var spanname = document.getElementById('p_name');
-            //alert(spanname.value);
-            spanname.innerHTML = json.name;//将班级等信息赋值
-            var span_number = document.getElementById('span_number');
-            var span_class = document.getElementById("span_class");
+            spanname.innerHTML = json.name;
+            //获取其他信息（班级、题目数），进行显示
+            var span_number = document.getElementById('p_number');
+            var span_class = document.getElementById("p_class");
             span_class.innerHTML = json.grade;
             span_number.innerHTML = userid;
         },
@@ -54,24 +46,29 @@ function show_information(){//用于与数据库沟通显示用户数据
 
 }
 
+//显示做题总数
 function show_allnum(){
     var show = document.getElementById("show_span1");//用于获取显示位置
     show.innerHTML = allnum;
     
 }
+//显示做题总时间
 function show_alltime(){
     var show = document.getElementById("show_span2");//用于获取显示位置
     show.innerHTML = alltime;
     
 }
+//显示正确率
 function show_percent(){
     var show = document.getElementById("show_span3");//用于获取显示位置
     show.innerHTML = percent;
     
 }
+
+
 //传消息给后端使其显示表格
 function tableload(sgrade){
-    //获取年级和单元
+    //获取年级
     var grade = sgrade;
     $.ajax({
 		type: "post",
@@ -79,9 +76,9 @@ function tableload(sgrade){
 		data: {id:userid,grade:grade},//提交到php的数据
 		dataType: "json",
 		success: function(marks){//返回表单
-            //将以json字符串格式返回的数据变成json的对象
+            //获取要显示表格的位置，并且对表格进行显示
             var showtable=window.document.getElementById("right_table");
-            var act=marks;
+            var act=marks;//获取返回表单
             showtable.innerHTML=act;//展示返回表单
         },
         //未成功接收时的处理

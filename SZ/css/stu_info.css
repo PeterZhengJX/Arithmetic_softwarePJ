@@ -1,5 +1,5 @@
-/* tea_info.css */
-/* 教师个人中心页面样式 */
+/* stu_info.css */
+/* 学生个人中心页面样式 */
 
 
 *{
@@ -24,8 +24,6 @@ body {
     background-size:cover;
     background-attachment:fixed;
 }
-
-/* 第二层背景 */
 .secondbg {
     color:#FFFFFF;
     background-color: #FFFFFF;
@@ -36,31 +34,37 @@ body {
     opacity: 0.9;
     }
 
-/* 最上方的链接 */
+/* 最上方的返回题库块 */
 .first_title{
     width: 100%;
     height: 25px;
 }
-
 /* 返回题库按钮 */
 #return_tiku {
     margin: 4px;
     height: 30px;
     width: 100px;
     border-radius: 6px;
-    background-color: rgb(218, 197, 151);
-    color: rgb(112, 45, 18);
+    background-color: rgb(225, 228, 227);
+    color: #000;
     text-align: center;
     cursor: pointer;
     size: 10px;
 }
 #return_tiku:hover{
-    background-color: rgb(216, 180, 103);
+    background-color: rgb(164, 168, 167);
 
 }
 #return_tiku:active{
-    background-color: rgb(224, 164, 33);
+    background-color: rgb(103, 105, 105);
 
+}
+
+/* 大标题 */
+.leixing {
+    font-family: "YouYuan";
+    margin: 0px;
+    padding: 5px;
 }
 
 /* 灰线 */
@@ -72,29 +76,7 @@ body {
     height:5px;
 }
 
-/* 个人中心的块 */
-#personal_center{
-    width: 100%;
-    height: 40px;
-    margin:5px;
-    padding: 5px;
-}
-
-/* “个人中心”标题 */
-.leixing {
-    font-family: "YouYuan";
-    margin: 0px;
-    padding: 5px;
-}
-
-/* 显示个人信息（姓名、工号）的块 */
-.usermessage{
-    width: 95%;
-    height: 45px;
-    margin: 0 auto; 
-}
-
-/* 显示姓名工号的p */
+/* 显示学生信息的并列块 */
 .user_mes{
     width:30%;
     float:left;
@@ -106,15 +88,33 @@ body {
     padding: 6px;
 }
 
-/* 显示姓名、工号的输出 */
+/* 个人中心块 */
+#personal_center{
+    width: 100%;
+    height: 40px;
+    margin:5px;
+    padding: 5px;
+}
+
+/* 显示用户信息（姓名、班级、学号）的块 */
+.usermessage{
+    width: 95%;
+    height: 45px;
+    margin: 0 auto; 
+    /* text-align: center; */
+}
+/* 显示用户信息（姓名、班级、学号）的地方 */
 #p_name{
     color: #000;
 }
-#span_number{
+#p_number{
+    color: #000;
+}
+#p_class{
     color: #000;
 }
 
-/* 显示个人做题总信息的小块 */
+/* 显示总信息的块 */
 #show_mes{
     margin: 10px;
     text-align: center;
@@ -126,31 +126,30 @@ body {
     vertical-align: top;
    
 }
-
-/* 显示个人做题总信息的小块按钮 */
+/* 总信息显示按钮 */
 .btn_show{
-   width: 100%;
-   height: 35px;
-   margin-top: 10px;
-   padding: 5px;
-   background-color: rgb(185, 181, 181);
-   color:#fff;
-   text-align: center;
-   font-family: "YouYuan";
-   font-size: 20px;
-   vertical-align: top;
-}
-.btn_show:hover{
-    background-color: rgb(164, 168, 167);
-}
-.btn_show:active{
-    background-color: rgb(103, 105, 105);
-}
-.btn_show:visited{
-    background-color: rgb(103, 105, 105);
-}
-
-/* 显示做题总信息的输出p */
+    width: 100%;
+    height: 35px;
+    margin-top: 10px;
+    padding: 5px;
+    background-color: rgb(185, 181, 181);
+    color:#fff;
+    text-align: center;
+    font-family: "YouYuan";
+    font-size: 20px;
+    vertical-align: top;
+ }
+ .btn_show:hover{
+     background-color: rgb(164, 168, 167);
+ }
+ .btn_show:active{
+     background-color: rgb(103, 105, 105);
+ }
+ .btn_show:visited{
+     background-color: rgb(103, 105, 105);
+ }
+ 
+/* 显示用户总做题信息的地方 */
 #show_span1{
     color:#000;
     font-family: "YouYuan";
@@ -173,14 +172,6 @@ body {
     vertical-align: top;
 }
 
-/* 显示详细信息的块 */
-#stu_info{
-    width:95%;
-    min-height: 100%;
-    margin:0 auto;
-    text-align: start;
-}
-
 /* 显示详细信息的标题p */
 .btn_show_rec{
    width: 100%;
@@ -193,19 +184,54 @@ body {
    font-family: "YouYuan";
    font-size: 20px;
 }
+.btn_show_rec:hover{
+    background-color: rgb(164, 168, 167);
+}
+.btn_show_rec:active{
+    background-color: rgb(103, 105, 105);
+}
+.btn_show_rec:visited{
+    background-color: rgb(164, 168, 167);
+}
+
+/* 显示详细信息的块 */
+#show_record{
+    margin: 10px auto;
+    text-align: center;
+    border: solid;
+    height: 1000px;
+    width: 95%;
+    padding: 5px;
+    font-family: "YouYuan";
+   
+}
+
+/* 显示详细信息的块 */
+#show_table{
+    font-family: "YouYuan";
+    margin: 0px;
+    padding: 0px;
+    width:100%;
+    min-height:10px;
+    /* display:inline-block; */
+    text-align:right;   
+    color: #000;
+    border: 0;  
+    vertical-align: top;
+    text-align: center;
+}
 
 /* 每一学期的块 */
-.timu_select {
+.xueqi_select {
     font-family: "YouYuan";
     margin: 5px;
     padding: 5px;
     width:20%;
-    min-height:400px;
+    height:800px;
     display:inline-block;
     text-align: left;   
     border: 0;  
 }
-
 /* 小灰线 */
 .mihuixian{
     width: 100%;
@@ -214,7 +240,6 @@ body {
     height:3px;
     background-color: #000;
 }
-
 /* 学期标题 */
 .xueqi{
     margin-bottom: 5px;
@@ -224,16 +249,18 @@ body {
     size: 4;
 }
 
+
 /* 单元选择按钮 */
 .sel_grade{
     font-family: "YouYuan";
-    margin: 1px;
-    padding: 0px;
-    width:10%;
-    height:20px;
+    margin: 5px;
+    padding: 1px;
+    width:60%;
+    height:30px;
     display:inline-block;
     background-color: rgb(225, 228, 227);
     text-align: center;
+    
     border: 0;  
 }
 .sel_grade:hover{
@@ -245,28 +272,7 @@ body {
 
 }
 
-/* 总成绩按钮 */
-.all_grade{
-    font-family: "YouYuan";
-    margin: 2px;
-    padding: 1px;
-    width:40%;
-    height:30px;
-    display:inline-block;
-    background-color: rgb(225, 228, 227);
-    text-align: center;
-    border: 0;  
-}
-.all_grade:hover{
-    background-color: rgb(164, 168, 167);
-
-}
-.all_grade:active{
-    background-color: rgb(103, 105, 105);
-
-}
-
-/* 显示成绩的块 */
+/* 显示表格的块 */
 #show_table_div{
     font-family: "YouYuan";
     margin: 5px auto;
@@ -278,9 +284,10 @@ body {
     color: #000;
     border: 0;  
     vertical-align: top; 
+    /* vertical-align:middle; */
 }
 
-/* 显示表格的大块 */
+/* 表格的格式 */
 #right_table{
     font-family: "YouYuan";
     margin: 5px;
@@ -295,61 +302,6 @@ body {
     text-align: center;
 }
 
-/* 显示表格的小块 */
-#show_table{
-    font-family: "YouYuan";
-    margin: 0px;
-    padding: 0px;
-    width:100%;
-    min-height:10px;
-    text-align:right;   
-    color: #000;
-    border: 0;  
-    vertical-align: top;
-    text-align: center;
-}
-
-/* 空白块，用于控制排版 */
-.empty{
-    height:20px;
-    width:100%;
-}
-
-/* 查询输入框 */
-.text_field {    
-    width: 40%;    
-    height: 27px;
-    border-top-left-radius: 5px;    
-    border-top-right-radius: 5px;    
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;    
-    border: 1px solid #000;
-    /* opacity: 0.5; */
-} 
-
-/* 查询块 */
-.find{
-    width: 80%;
-    height: 30px;
-}
-
-/* 查询按钮 */
-.btn_find{
-    width: 8%;    
-    height: 27px;
-    border-top-left-radius: 5px;    
-    border-top-right-radius: 5px;    
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;    
-    color: white;    
-    background-color: rgb(94, 95, 92);  
-}
-.btn_find:hover {
-    background-color: rgb(51, 51, 50);
-}
-.btn_find:active {
-    background-color: #000000;
-}
 /* 表格的最小元素 */
 .td_show{
     color: #000;
